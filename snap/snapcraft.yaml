@@ -54,13 +54,8 @@ parts:
       cd unvanquished_${SNAPCRAFT_PROJECT_VERSION}
       unzip linux-${CRAFT_ARCH_BUILD_FOR}.zip -d $CRAFT_PART_INSTALL/unvanquished
       cp pkg/* $CRAFT_PART_INSTALL/unvanquished/pkg
-    override-prime: |
-      craftctl default
-      cd unvanquished/
-      execstack -c irt_core-*
     build-packages:
       - unzip
-      - execstack
     stage-packages:
       - zlib1g
       - liblua5.3-0
