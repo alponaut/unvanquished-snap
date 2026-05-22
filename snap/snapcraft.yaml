@@ -29,6 +29,7 @@ apps:
   unvanquished:
     extensions: [gnome]
     command: unvanquished/daemon
+    common-id: net.unvanquished.Unvanquished
     plugs:
       - network
       - network-bind
