@@ -1,11 +1,13 @@
 [Desktop Entry]
 Version=1.5
 Name=Unvanquished
-Comment=Team-based FPS/RTS Game, Aliens vs. Humans
+Comment=FPS/RTS Game - Aliens vs. Humans
 Icon=${SNAP}/meta/gui/unvanquished.png
 Terminal=false
 Type=Application
 Exec=unvanquished-alpo.unvanquished
-Categories=Game;ActionGame;StrategyGame;
-# Unclear if this will work when Breakpad is enabled
+MimeType=x-scheme-handler/unv
+Categories=Game;ActionGame;StrategyGame;Shooter;
+SingleMainWindow=true
 PrefersNonDefaultGPU=true
+Keywords=3d;aliens;daemon;fps;idtech;multiplayer;opengl;q3;q3a;quake;rts;shooter;strategy;tremulous;
