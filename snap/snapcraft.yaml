@@ -67,7 +67,7 @@ parts:
       cp pkg/* $CRAFT_PART_INSTALL/usr/lib/unvanquished/pkg
     override-prime: |
       craftctl default
-      cd /usr/lib/unvanquished/
+      cd $CRAFT_PART_INSTALL/usr/lib/unvanquished/
       patchelf --clear-execstack irt_core-*
     build-packages:
       - unzip
