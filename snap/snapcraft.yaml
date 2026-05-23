@@ -23,6 +23,7 @@ apps:
     common-id: net.unvanquished.Unvanquished
     environment:
       XDG_DATA_HOME: $SNAP_USER_COMMON
+      XDG_CONFIG_HOME: $SNAP_USER_COMMON
     plugs:
       - network
       - network-bind
