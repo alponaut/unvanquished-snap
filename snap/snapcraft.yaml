@@ -52,6 +52,7 @@ parts:
     override-build: |
       mkdir -p $CRAFT_PART_INSTALL/usr/bin
       cp $CRAFT_PROJECT_DIR/unvanquished-launcher.sh $CRAFT_PART_INSTALL/usr/bin
+      chmod 755 $CRAFT_PART_INSTALL/usr/bin/unvanquished-launcher.sh
   
   unvanquished:
     after: [metainfo, launcher]
