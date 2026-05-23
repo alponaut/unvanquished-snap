@@ -1,18 +1,9 @@
 name: unvanquished-alpo
 base: core24
 version: '0.56.2'
-summary: Real-time strategy game where aliens and humans fight for their survival
-description: |
-  Unvanquished is a free, open-source first-person strategy game shooter, pitting technologically advanced human soldiers against hordes of highly adaptable aliens. Players can choose from either team, providing for an entirely different experience on both sides, as humans focus on long-range firepower while aliens rely instead on quick movement and stealth. The goal of each match is to destroy the enemy base, preventing members of the opposing team from spawning. Upgrades for both teams are earned by a combination of individual performance and team map control, unlocking access to more powerful weapons and equipment for the humans, and larger, more ferocious forms for the aliens.
-
+adopt-info: metainfo
 grade: stable
 confinement: strict
-
-icon: snap/gui/unvanquished.png
-website: https://unvanquished.net/
-contact: https://github.com/alponaut/unvanquished-snap-unofficial/issues
-issues: https://github.com/alponaut/unvanquished-snap-unofficial/issues
-source-code: https://github.com/alponaut/unvanquished-snap-unofficial/
 
 platforms:
   amd64:
@@ -28,7 +19,7 @@ platforms:
 apps:
   unvanquished:
     extensions: [gnome]
-    command: unvanquished/daemon
+    command: usr/bin/unvanquished-launcher.sh $SNAP/usr/lib/unvanquished/daemon
     common-id: net.unvanquished.Unvanquished
     environment:
       XDG_DATA_HOME: $SNAP_USER_COMMON
@@ -45,21 +36,38 @@ plugs:
     private: true
 
 parts:
+  metainfo:
+    plugin: nil
+    source: .
+    override-build: |
+      mkdir -p $CRAFT_PART_INSTALL/usr/share/metainfo/
+      cp $CRAFT_PROJECT_DIR/net.unvanquished.Unvanquished.metainfo.xml $CRAFT_PART_INSTALL/usr/share/metainfo
+    parse-info:
+      - usr/share/metainfo/net.unvanquished.Unvanquished.metainfo.xml
+  
+  launcher:
+    plugin: nil
+    source: .
+    override-build: |
+      mkdir -p $CRAFT_PART_INSTALL/usr/bin
+      cp $CRAFT_PROJECT_DIR/unvanquished-launcher.sh $CRAFT_PART_INSTALL/usr/bin
+  
   unvanquished:
+    after: [metainfo, launcher]
     plugin: nil
     source: https://github.com/Unvanquished/Unvanquished/releases/download/v${SNAPCRAFT_PROJECT_VERSION}/unvanquished_${SNAPCRAFT_PROJECT_VERSION}.zip
     source-type: zip
     override-build: |
-      mkdir -p $CRAFT_PART_INSTALL/unvanquished
-      mkdir -p $CRAFT_PART_INSTALL/unvanquished/pkg
+      mkdir -p $CRAFT_PART_INSTALL/usr/lib/unvanquished
+      mkdir -p $CRAFT_PART_INSTALL/usr/lib/unvanquished/pkg
       
       cd $CRAFT_PART_SRC
       cd unvanquished_${SNAPCRAFT_PROJECT_VERSION}
-      unzip linux-${CRAFT_ARCH_BUILD_FOR}.zip -d $CRAFT_PART_INSTALL/unvanquished
-      cp pkg/* $CRAFT_PART_INSTALL/unvanquished/pkg
+      unzip linux-${CRAFT_ARCH_BUILD_FOR}.zip -d $CRAFT_PART_INSTALL/usr/lib/unvanquished
+      cp pkg/* $CRAFT_PART_INSTALL/usr/lib/unvanquished/pkg
     override-prime: |
       craftctl default
-      cd unvanquished/
+      cd /usr/lib/unvanquished/
       patchelf --clear-execstack irt_core-*
     build-packages:
       - unzip
