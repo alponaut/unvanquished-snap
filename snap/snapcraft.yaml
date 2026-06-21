@@ -20,6 +20,7 @@ apps:
   unvanquished:
     extensions: [gnome]
     command: usr/bin/unvanquished-launcher.sh $SNAP/usr/lib/unvanquished/daemon
+    common-id: net.unvanquished.Unvanquished
     environment:
       XDG_DATA_HOME: $SNAP_USER_COMMON
       XDG_CONFIG_HOME: $SNAP_USER_COMMON
@@ -78,15 +79,4 @@ parts:
       - liblua5.3-0
       - libopenal1
       - libopusfile0
-  
-  gpu-2404:
-    after: [unvanquished]
-    source: https://github.com/canonical/gpu-snap.git
-    plugin: dump
-    override-prime: |
-      craftctl default
-      ${CRAFT_PART_SRC}/bin/gpu-2404-cleanup mesa-2404
-      # Workaround for https://bugs.launchpad.net/snapd/+bug/2055273
-      mkdir -p "${CRAFT_PRIME}/gpu-2404"
-    prime:
-    - bin/gpu-2404-wrapper
+      
