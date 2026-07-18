@@ -104,6 +104,7 @@ parts:
       - patchelf
       - libfreetype-dev
       - libncurses-dev
+      - aria2
     stage-packages:
       - zlib1g
       - libgmp10
