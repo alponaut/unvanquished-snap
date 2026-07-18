@@ -92,8 +92,8 @@ parts:
       - libsdl3-dev
       - libglew-dev
       - libpng-dev
-      - libjpeg9
-      - libwebp7
+      - libjpeg9-dev
+      - libwebp-dev
       - libopenal-dev
       - libogg-dev
       - libvorbis-dev
@@ -115,7 +115,7 @@ parts:
       - libopenal1
       - libopusfile0
       - libsdl3-0
-      - libjpeg9-dev
+      - libjpeg9
       - libglew2.2
       - libwebp7
       - libopus0
