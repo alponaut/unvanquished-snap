@@ -112,7 +112,7 @@ parts:
       - libopus-dev
       - libopusfile-dev
       - libdecor-0-dev
-      - liblua5.5-dev
+      - liblua5.4-dev
       - patchelf
       - libfreetype-dev
       - libncurses-dev
@@ -123,7 +123,7 @@ parts:
       - libcurl4t64
       - libpng16-16t64
       - libnettle8t64
-      - liblua5.5-0
+      - liblua5.4-0
       - libopenal1
       - libopusfile0
       - libjpeg8
