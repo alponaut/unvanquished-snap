@@ -1,9 +1,11 @@
 name: unvanquished-alpo
-base: core26
+base: core24
 version: '0.56.2'
 adopt-info: metainfo
 grade: stable
 confinement: strict
+
+icon: snap/gui/unvanquished.png
 
 platforms:
   amd64:
@@ -21,7 +23,7 @@ platforms:
 
 apps:
   unvanquished:
-    extensions: [gpu]
+    extensions: [gnome]
     command: usr/bin/unvanquished-launcher.sh $SNAP/usr/lib/unvanquished/daemon
     common-id: net.unvanquished.Unvanquished
     environment:
@@ -56,9 +58,20 @@ parts:
       mkdir -p $CRAFT_PART_INSTALL/usr/bin
       cp $CRAFT_PROJECT_DIR/unvanquished-launcher.sh $CRAFT_PART_INSTALL/usr/bin
       chmod 755 $CRAFT_PART_INSTALL/usr/bin/unvanquished-launcher.sh
+
+  sdl3:
+    after: [metainfo, launcher]
+    plugin: cmake
+    source: https://github.com/libsdl-org/SDL.git
+    source-type: git
+    source-tag: 3.4.12
+    cmake-parameters:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DBUILD_TESTING=OFF
   
   unvanquished:
-    after: [metainfo, launcher]
+    after: [metainfo, launcher, sdl3]
     plugin: nil
     source: https://github.com/Unvanquished/Unvanquished.git
     source-type: git
@@ -89,7 +102,6 @@ parts:
       - libgmp-dev
       - nettle-dev
       - libcurl4-openssl-dev
-      - libsdl3-dev
       - libglew-dev
       - libpng-dev
       - libjpeg-dev
@@ -114,7 +126,6 @@ parts:
       - liblua5.5-0
       - libopenal1
       - libopusfile0
-      - libsdl3-0
       - libjpeg8
       - libglew2.2
       - libwebp7
@@ -132,11 +143,12 @@ parts:
       - launcher
     plugin: nil
     build-snaps:
-      - core26
-      - mesa-2604
+      - core24
+      - gnome-46-2404
+      - mesa-2404
     override-prime: |
       set -eux
-      for snap in "core26" "mesa-2604"; do
+      for snap in "core24" "gnome-46-2404" "mesa-2404"; do
           cd "/snap/$snap/current" && find . -type f,l -exec rm -rf "$CRAFT_PRIME/{}" \;
       done
   
