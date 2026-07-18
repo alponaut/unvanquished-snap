@@ -83,6 +83,9 @@ parts:
     source: https://github.com/Unvanquished/Unvanquished.git
     source-type: git
     source-tag: v${SNAPCRAFT_PROJECT_VERSION}
+    override-pull: |
+      craftctl default
+      sed -i 's/isfinite(temp)/std::isfinite(temp)/' src/daemon/src/common/Cvar.cpp
     override-build: |
       mkdir -p $CRAFT_PART_INSTALL/usr/lib/unvanquished
       
