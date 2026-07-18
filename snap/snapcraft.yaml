@@ -68,7 +68,16 @@ parts:
     cmake-parameters:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_INSTALL_PREFIX=/usr
-      - -DBUILD_TESTING=OFF
+      - -DSDL_TEST=OFF
+    build-packages:
+      - build-essential
+      - cmake
+      - ninja-build
+      - libwayland-dev
+      - libxkbcommon-dev
+      - libx11-dev
+      - libxext-dev
+      - libgl1-mesa-dev
   
   unvanquished:
     after: [metainfo, launcher, sdl3]
