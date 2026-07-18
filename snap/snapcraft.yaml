@@ -15,10 +15,13 @@ platforms:
   armhf:
     build-on: [armhf]
     build-for: [armhf]
+  armhf:
+    build-on: [riscv64]
+    build-for: [riscv64]
 
 apps:
   unvanquished:
-    extensions: [gnome]
+    extensions: [gpu]
     command: usr/bin/unvanquished-launcher.sh $SNAP/usr/lib/unvanquished/daemon
     common-id: net.unvanquished.Unvanquished
     environment:
@@ -129,11 +132,10 @@ parts:
     plugin: nil
     build-snaps:
       - core26
-      - gnome-core26
       - mesa-2604
     override-prime: |
       set -eux
-      for snap in "core26" "gnome-core26" "mesa-2604"; do
+      for snap in "core26" "mesa-2604"; do
           cd "/snap/$snap/current" && find . -type f,l -exec rm -rf "$CRAFT_PRIME/{}" \;
       done
   
