@@ -100,6 +100,7 @@ parts:
       - liblua5.5-dev
       - patchelf
       - libfreetype-dev
+      - libncurses-dev
     stage-packages:
       - zlib1g
       - libgmp10
@@ -118,6 +119,7 @@ parts:
       - libvorbis0a
       - libdecor-0-0
       - libfreetype6
+      - libncurses6
   
   cleanup:
     after:
