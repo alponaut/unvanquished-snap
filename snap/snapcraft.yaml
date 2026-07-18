@@ -1,5 +1,5 @@
 name: unvanquished-alpo
-base: core24
+base: core26
 version: '0.56.2'
 adopt-info: metainfo
 grade: stable
@@ -57,26 +57,79 @@ parts:
   unvanquished:
     after: [metainfo, launcher]
     plugin: nil
-    source: https://github.com/Unvanquished/Unvanquished/releases/download/v${SNAPCRAFT_PROJECT_VERSION}/unvanquished_${SNAPCRAFT_PROJECT_VERSION}.zip
-    source-type: zip
+    source: https://github.com/Unvanquished/Unvanquished.git
+    source-type: git
+    source-tag: v${SNAPCRAFT_PROJECT_VERSION}
     override-build: |
       mkdir -p $CRAFT_PART_INSTALL/usr/lib/unvanquished
-      mkdir -p $CRAFT_PART_INSTALL/usr/lib/unvanquished/pkg
       
       cd $CRAFT_PART_SRC
-      cd unvanquished_${SNAPCRAFT_PROJECT_VERSION}
-      unzip linux-${CRAFT_ARCH_BUILD_FOR}.zip -d $CRAFT_PART_INSTALL/usr/lib/unvanquished
-      cp pkg/* $CRAFT_PART_INSTALL/usr/lib/unvanquished/pkg
+      mkdir -p build/pkg
+      ./download-paks build/pkg
+      cd build
+      cmake .. -DUSE_EXTERNAL_DEPS_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF
+      make -j$(nproc)
+
+      cd $CRAFT_PART_SRC
+      cp -r build/* $CRAFT_PART_INSTALL/usr/lib/unvanquished/
     override-prime: |
       craftctl default
       cd $CRAFT_PART_INSTALL/usr/lib/unvanquished/
       patchelf --clear-execstack irt_core-*
     build-packages:
-      - unzip
+      - git
+      - build-essential
+      - cmake
+      - python3-yaml
+      - python3-jinja2
+      - zlib1g-dev
+      - libgmp-dev
+      - nettle-dev
+      - libcurl4-openssl-dev
+      - libsdl3-dev
+      - libglew-dev
+      - libpng-dev
+      - libjpeg9
+      - libwebp7
+      - libopenal-dev
+      - libogg-dev
+      - libvorbis-dev
+      - libopus-dev
+      - libopusfile-dev
+      - libdecor-0-dev
+      - liblua5.5-dev
       - patchelf
     stage-packages:
       - zlib1g
-      - liblua5.3-0
+      - libgmp10
+      - libcurl4t64
+      - libpng16-16t64
+      - libnettle8t64
+      - liblua5.5-0
       - libopenal1
       - libopusfile0
-      
+      - libsdl3-0
+      - libjpeg9-dev
+      - libglew2.2
+      - libwebp7
+      - libopus0
+      - libogg0
+      - libvorbis0a
+      - libdecor-0-0
+  
+  cleanup:
+    after:
+      - unvanquished
+      - metainfo
+      - launcher
+    plugin: nil
+    build-snaps:
+      - core26
+      - gnome-core26
+      - mesa-2604
+    override-prime: |
+      set -eux
+      for snap in "core26" "gnome-core26" "mesa-2604"; do
+          cd "/snap/$snap/current" && find . -type f,l -exec rm -rf "$CRAFT_PRIME/{}" \;
+      done
+  
