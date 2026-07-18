@@ -99,6 +99,7 @@ parts:
       - libdecor-0-dev
       - liblua5.5-dev
       - patchelf
+      - libfreetype-dev
     stage-packages:
       - zlib1g
       - libgmp10
@@ -116,6 +117,7 @@ parts:
       - libogg0
       - libvorbis0a
       - libdecor-0-0
+      - libfreetype6
   
   cleanup:
     after:
