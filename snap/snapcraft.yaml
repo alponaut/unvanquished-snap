@@ -99,6 +99,8 @@ parts:
       craftctl default
       cd $CRAFT_PART_INSTALL/usr/lib/unvanquished/
       patchelf --clear-execstack irt_core-*
+    build-environment:
+      - PYTHONPATH: /usr/lib/python3/dist-packages:$PYTHONPATH
     build-packages:
       - git
       - build-essential
