@@ -87,7 +87,6 @@ parts:
       mkdir -p $CRAFT_PART_INSTALL/usr/lib/unvanquished
       
       cd $CRAFT_PART_SRC
-      pip3 install -r tools/cbse/requirements.txt
       mkdir -p build/pkg
       ./download-paks build/pkg
       cd build
@@ -125,7 +124,8 @@ parts:
       - aria2
       - python3
       - python3-pip
-      - python3-setuptools
+      - python3-yaml
+      - python3-jinja2
     stage-packages:
       - zlib1g
       - libgmp10
