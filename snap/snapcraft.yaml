@@ -68,11 +68,14 @@ parts:
     cmake-parameters:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_INSTALL_PREFIX=/usr
-      - -DSDL_TEST=OFF
+      - -DSDL_TESTS=OFF
       - -DSDL_X11_XSCRNSAVER=OFF
+      - -DSDL_PIPEWIRE=ON
+      - -DSDL_PIPEWIRE_SHARED=ON
     build-packages:
       - build-essential
       - ninja-build
+      - libpipewire-0.3-dev
   
   unvanquished:
     after: [metainfo, launcher, sdl3]
@@ -84,6 +87,7 @@ parts:
       mkdir -p $CRAFT_PART_INSTALL/usr/lib/unvanquished
       
       cd $CRAFT_PART_SRC
+      pip3 install -r tools/cbse/requirements.txt
       mkdir -p build/pkg
       ./download-paks build/pkg
       cd build
@@ -100,8 +104,6 @@ parts:
       - git
       - build-essential
       - cmake
-      - python3-yaml
-      - python3-jinja2
       - zlib1g-dev
       - libgmp-dev
       - nettle-dev
@@ -121,6 +123,9 @@ parts:
       - libfreetype-dev
       - libncurses-dev
       - aria2
+      - python3
+      - python3-pip
+      - python3-setuptools
     stage-packages:
       - zlib1g
       - libgmp10
