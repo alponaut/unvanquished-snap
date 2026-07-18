@@ -64,7 +64,7 @@ parts:
     plugin: cmake
     source: https://github.com/libsdl-org/SDL.git
     source-type: git
-    source-tag: 3.4.12
+    source-tag: release-3.4.12
     cmake-parameters:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_INSTALL_PREFIX=/usr
@@ -141,6 +141,7 @@ parts:
       - unvanquished
       - metainfo
       - launcher
+      - sdl3
     plugin: nil
     build-snaps:
       - core24
