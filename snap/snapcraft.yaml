@@ -86,27 +86,36 @@ parts:
     source-type: git
     source-tag: v${SNAPCRAFT_PROJECT_VERSION}
     override-build: |
-      mkdir -p $CRAFT_PART_INSTALL/usr/lib/unvanquished
+      mkdir -p $CRAFT_PART_INSTALL/usr/lib/unvanquished/pkg
       
       cd $CRAFT_PART_SRC
-      mkdir -p build/pkg
-      ./download-paks build/pkg
+      mkdir -p build
+      ./download-paks $CRAFT_PART_INSTALL/usr/lib/unvanquished/pkg
       cd build
-      cmake .. -DUSE_EXTERNAL_DEPS_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF
+      cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF -DBUILD_TTY_CLIENT=OFF -DBUILD_SERVER=OFF -DUSE_EXTERNAL_DEPS_LIBS=FALSE -DUSE_CURSES=TRUE -DUSE_HARDENING=TRUE -DUSE_LTO=TRUE -DUSE_OPENMP=TRUE
       make -j$(nproc)
+      find . -mindepth 1 -type d -depth -exec rm -rf {} +
+      rm -f *.a
+      rm -f *.cmake
+      rm -f *.txt
+      rm -f Makefile
 
       cd $CRAFT_PART_SRC
       cp -r build/* $CRAFT_PART_INSTALL/usr/lib/unvanquished/
+    build-environment:
+      - PYTHONPATH: /usr/lib/python3/dist-packages:$PYTHONPATH
+    override-pull: |
+      craftctl default
+      sed -i 's/isfinite(temp)/std::isfinite(temp)/g' $CRAFT_PART_SRC/daemon/src/common/Cvar.cpp
     override-prime: |
       craftctl default
       cd $CRAFT_PART_INSTALL/usr/lib/unvanquished/
       patchelf --clear-execstack irt_core-*
-    build-environment:
-      - PYTHONPATH: /usr/lib/python3/dist-packages:$PYTHONPATH
     build-packages:
       - git
       - build-essential
       - cmake
+      - ninja-build
       - zlib1g-dev
       - libgmp-dev
       - nettle-dev
