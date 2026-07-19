@@ -9,17 +9,11 @@ icon: snap/gui/unvanquished.png
 
 platforms:
   amd64:
-    build-on: [amd64]
-    build-for: [amd64]
   arm64:
-    build-on: [arm64]
-    build-for: [arm64]
   armhf:
-    build-on: [armhf]
-    build-for: [armhf]
+  ppc64el:
   riscv64:
-    build-on: [riscv64]
-    build-for: [riscv64]
+  s390x:
 
 apps:
   unvanquished:
