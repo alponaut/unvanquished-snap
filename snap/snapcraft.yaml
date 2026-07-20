@@ -11,7 +11,6 @@ platforms:
   amd64:
   arm64:
   armhf:
-  riscv64:
 
 apps:
   unvanquished:
@@ -108,14 +107,7 @@ parts:
     override-prime: |
       craftctl default
       cd $CRAFT_PART_INSTALL/usr/lib/unvanquished/
-      case "$CRAFT_ARCH_TRIPLET_BUILD_FOR" in
-        "x86_64-linux-gnu" | "aarch64-linux-gnu" | "arm-linux-gnueabihf")
-          patchelf --clear-execstack irt_core-*
-          ;;
-        *)
-          echo "hello"
-          ;;
-      esac
+      patchelf --clear-execstack irt_core-*
     build-packages:
       - git
       - build-essential
