@@ -10,7 +10,6 @@ icon: snap/gui/unvanquished.png
 platforms:
   amd64:
   arm64:
-  armhf:
 
 apps:
   unvanquished:
