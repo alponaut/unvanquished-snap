@@ -2,7 +2,9 @@ name: unvanquished-alpo
 base: core24
 version: '0.56.2'
 
-adopt-info: assets
+summary: Fast paced, first person strategy game
+description: |
+  Unvanquished is a real-time strategy game played as a first-person shooter where evolving aliens and heavily armed humans fight for their survival.
 icon: snap/gui/unvanquished.png
 
 grade: stable
@@ -39,27 +41,14 @@ parts:
     source-type: git
     build-packages:
       - aria2
-      - jq
-    override-pull: |
-      set -e
-      LATEST_TAG=$(curl -s https://api.github.com/repos/Unvanquished/Unvanquished/releases/latest | jq -r .tag_name)
-      craftctl default
-      git checkout "$LATEST_TAG"
-      craftctl set version=${LATEST_TAG#v}
     override-build: |
       cd $CRAFT_PART_SRC
       mkdir -p $CRAFT_PART_INSTALL/usr/share/unvanquished/pkg
       ./download-paks $CRAFT_PART_INSTALL/usr/share/unvanquished/pkg
-
-      mkdir -p $CRAFT_PART_INSTALL/usr/share/metainfo/
-      cp $CRAFT_PROJECT_DIR/net.unvanquished.Unvanquished.metainfo.xml $CRAFT_PART_INSTALL/usr/share/metainfo
-      chmod 644 $CRAFT_PART_INSTALL/usr/share/metainfo/net.unvanquished.Unvanquished.metainfo.xml
       
       mkdir -p $CRAFT_PART_INSTALL/usr/bin
       cp $CRAFT_PROJECT_DIR/unvanquished $CRAFT_PART_INSTALL/usr/bin
       chmod 755 $CRAFT_PART_INSTALL/usr/bin/unvanquished
-    parse-info:
-      - usr/share/metainfo/net.unvanquished.Unvanquished.metainfo.xml
       
   libsdl:
     after: [assets]
@@ -91,7 +80,6 @@ parts:
     plugin: nil
     source: https://github.com/DaemonEngine/Daemon.git
     source-type: git
-    source-tag: unvanquished/${SNAPCRAFT_PROJECT_VERSION}
     override-build: |
       mkdir -p $CRAFT_PART_INSTALL/usr/lib/unvanquished
       cd $CRAFT_PART_SRC
