@@ -1,11 +1,14 @@
 name: unvanquished-alpo
 base: core24
 version: '0.56.2'
-adopt-info: assets
+
+summary: Fast paced, first person strategy game
+description: |
+  Unvanquished is a real-time strategy game played as a first-person shooter where evolving aliens and heavily armed humans fight for their survival.
+icon: snap/gui/unvanquished.png
+
 grade: stable
 confinement: strict
-
-icon: snap/gui/unvanquished.png
 
 platforms:
   amd64:
@@ -50,15 +53,9 @@ parts:
       mkdir -p $CRAFT_PART_INSTALL/usr/share/unvanquished/pkg
       ./download-paks $CRAFT_PART_INSTALL/usr/share/unvanquished/pkg
       
-      mkdir -p $CRAFT_PART_INSTALL/usr/share/metainfo/
-      cp $CRAFT_PROJECT_DIR/net.unvanquished.Unvanquished.metainfo.xml $CRAFT_PART_INSTALL/usr/share/metainfo
-      chmod 644 $CRAFT_PART_INSTALL/usr/share/metainfo/net.unvanquished.Unvanquished.metainfo.xml
-      
       mkdir -p $CRAFT_PART_INSTALL/usr/bin
       cp $CRAFT_PROJECT_DIR/unvanquished $CRAFT_PART_INSTALL/usr/bin
       chmod 755 $CRAFT_PART_INSTALL/usr/bin/unvanquished
-    parse-info:
-      - usr/share/metainfo/net.unvanquished.Unvanquished.metainfo.xml
 
   libsdl:
     after: [assets]
@@ -101,7 +98,7 @@ parts:
         chmod 755 $f
         cp $f $CRAFT_PART_INSTALL/usr/lib/unvanquished/
       done
-      chmod 644 $CRAFT_PART_INSTALL/usr/lib/unvanquished/irt_core-*
+      chmod 644 irt_core-*
       cp -r irt_core-* $CRAFT_PART_INSTALL/usr/lib/unvanquished/
     build-environment:
       - PYTHONPATH: /usr/lib/python3/dist-packages:$PYTHONPATH
