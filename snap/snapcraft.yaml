@@ -1,7 +1,7 @@
 name: unvanquished-alpo
 base: core24
 version: '0.56.2'
-adopt-info: metainfo
+adopt-info: assets
 grade: stable
 confinement: strict
 
