@@ -1,6 +1,6 @@
 name: unvanquished-alpo
 base: core24
-version: '0.56.2'
+version: git
 
 summary: Fast paced, first person strategy game
 description: |
