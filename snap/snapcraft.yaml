@@ -1,6 +1,5 @@
 name: unvanquished-alpo
 base: core24
-version: '0.56.2'
 
 adopt-info: assets
 icon: snap/gui/unvanquished.png
