@@ -38,6 +38,7 @@ parts:
     override-build: |
       mkdir -p $CRAFT_PART_INSTALL/usr/share/metainfo/
       cp $CRAFT_PROJECT_DIR/net.unvanquished.Unvanquished.metainfo.xml $CRAFT_PART_INSTALL/usr/share/metainfo
+      chmod 644 $CRAFT_PART_INSTALL/usr/share/metainfo/net.unvanquished.Unvanquished.metainfo.xml
     parse-info:
       - usr/share/metainfo/net.unvanquished.Unvanquished.metainfo.xml
 
@@ -51,19 +52,31 @@ parts:
 
   assets:
     plugin: nil
-    source: https://dl.unvanquished.net/release/unvanquished_${SNAPCRAFT_PROJECT_VERSION}.zip
-    source-type: zip
+    source: https://github.com/Unvanquished/Unvanquished.git
+    source-type: git
+    build-packages:
+      - aria2
+      - jq
+    override-pull: |
+      set -e
+      LATEST_TAG=$(curl -s https://api.github.com/repos/PrismLauncher/PrismLauncher/releases/latest | jq -r .tag_name)
+      craftctl default
+      git checkout "$LATEST_TAG"
+      craftctl set version=${LATEST_TAG#v}
     override-build: |
-      mkdir -p $CRAFT_PART_INSTALL/usr/lib/unvanquished/pkg
-      cd unvanquished_${SNAPCRAFT_PROJECT_VERSION}
-      cp -r pkg/* $CRAFT_PART_INSTALL/usr/lib/unvanquished/pkg/
+      mkdir -p $CRAFT_PART_INSTALL/usr/share/unvanquished/pkg
+      ./download-paks $CRAFT_PART_INSTALL/usr/share/unvanquished/pkg
 
   sdl3:
     after: [metainfo, launcher, assets]
     plugin: cmake
     source: https://github.com/libsdl-org/SDL.git
     source-type: git
-    source-tag: release-3.4.12
+    override-pull: |
+      set -e
+      LATEST_TAG=$(curl -s https://api.github.com/repos/PrismLauncher/PrismLauncher/releases/latest | jq -r .tag_name)
+      craftctl default
+      git checkout "$LATEST_TAG"
     cmake-parameters:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_INSTALL_PREFIX=/usr
@@ -77,6 +90,7 @@ parts:
       - libpipewire-0.3-dev
       - libwayland-dev
       - libdecor-0-dev
+      - jq
 
   unvanquished:
     after: [metainfo, launcher, sdl3, assets]
@@ -90,14 +104,12 @@ parts:
       cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF -DBUILD_TTY_CLIENT=OFF -DBUILD_SERVER=OFF -DUSE_EXTERNAL_DEPS_LIBS=FALSE -DUSE_CURSES=TRUE -DUSE_HARDENING=TRUE -DUSE_LTO=TRUE -DUSE_OPENMP=TRUE
       cmake --build build -- -j$(nproc)
       cd build
-      find . -mindepth 1 -type d -depth -exec rm -rf {} +
-      rm -f *.a
-      rm -f *.cmake
-      rm -f *.txt
-      rm -f Makefile
-
-      cd $CRAFT_PART_SRC
-      cp -r build/* $CRAFT_PART_INSTALL/usr/lib/unvanquished/
+      for f in daemon nacl_loader nacl_helper_bootstrap; do
+        cp $f $CRAFT_PART_INSTALL/usr/lib/unvanquished/
+        chmod 755 $f
+      done
+      cp -r irt_core-* $CRAFT_PART_INSTALL/usr/lib/unvanquished/
+      chmod 644 $CRAFT_PART_INSTALL/usr/lib/unvanquished/irt-core-*
     build-environment:
       - PYTHONPATH: /usr/lib/python3/dist-packages:$PYTHONPATH
     override-pull: |
