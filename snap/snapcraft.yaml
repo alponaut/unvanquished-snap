@@ -98,11 +98,11 @@ parts:
       cmake --build build -- -j$(nproc)
       cd build
       for f in daemon nacl_loader nacl_helper_bootstrap; do
-        cp $f $CRAFT_PART_INSTALL/usr/lib/unvanquished/
         chmod 755 $f
+        cp $f $CRAFT_PART_INSTALL/usr/lib/unvanquished/
       done
-      cp -r irt_core-* $CRAFT_PART_INSTALL/usr/lib/unvanquished/
       chmod 644 $CRAFT_PART_INSTALL/usr/lib/unvanquished/irt_core-*
+      cp -r irt_core-* $CRAFT_PART_INSTALL/usr/lib/unvanquished/
     build-environment:
       - PYTHONPATH: /usr/lib/python3/dist-packages:$PYTHONPATH
     override-pull: |
