@@ -14,7 +14,7 @@ platforms:
 apps:
   unvanquished:
     extensions: [gnome]
-    command: usr/bin/unvanquished
+    command: usr/bin/unvanquished -pakpath $SNAP/usr/share/unvanquished/pkg
     common-id: net.unvanquished.Unvanquished
     environment:
       XDG_DATA_HOME: $SNAP_USER_COMMON
