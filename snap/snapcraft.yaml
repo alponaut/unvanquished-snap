@@ -93,7 +93,6 @@ parts:
     override-build: |
       mkdir -p $CRAFT_PART_INSTALL/usr/lib/unvanquished
       cd $CRAFT_PART_SRC
-      git checkout "unvanquished/${SNAPCRAFT_PROJECT_VERSION}"
       cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF -DBUILD_TTY_CLIENT=OFF -DBUILD_SERVER=OFF -DUSE_EXTERNAL_DEPS_LIBS=FALSE -DUSE_CURSES=TRUE -DUSE_HARDENING=TRUE -DUSE_LTO=TRUE -DUSE_OPENMP=TRUE
       cmake --build build -- -j$(nproc)
       cd build
@@ -107,6 +106,9 @@ parts:
       - PYTHONPATH: /usr/lib/python3/dist-packages:$PYTHONPATH
     override-pull: |
       craftctl default
+      LATEST_TAG=$(curl -s https://api.github.com/repos/Unvanquished/Unvanquished/releases/latest | jq -r .tag_name)
+      VERSION=${LATEST_TAG#v}
+      git checkout "unvanquished/${VERSION}"
       sed -i 's/isfinite(temp)/std::isfinite(temp)/g' $CRAFT_PART_SRC/src/common/Cvar.cpp
     override-prime: |
       craftctl default
