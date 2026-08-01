@@ -102,7 +102,7 @@ parts:
         chmod 755 $f
       done
       cp -r irt_core-* $CRAFT_PART_INSTALL/usr/lib/unvanquished/
-      chmod 644 $CRAFT_PART_INSTALL/usr/lib/unvanquished/irt-core-*
+      chmod 644 $CRAFT_PART_INSTALL/usr/lib/unvanquished/irt_core-*
     build-environment:
       - PYTHONPATH: /usr/lib/python3/dist-packages:$PYTHONPATH
     override-pull: |
