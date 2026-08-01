@@ -32,24 +32,6 @@ plugs:
     private: true
 
 parts:
-  metainfo:
-    plugin: nil
-    source: .
-    override-build: |
-      mkdir -p $CRAFT_PART_INSTALL/usr/share/metainfo/
-      cp $CRAFT_PROJECT_DIR/net.unvanquished.Unvanquished.metainfo.xml $CRAFT_PART_INSTALL/usr/share/metainfo
-      chmod 644 $CRAFT_PART_INSTALL/usr/share/metainfo/net.unvanquished.Unvanquished.metainfo.xml
-    parse-info:
-      - usr/share/metainfo/net.unvanquished.Unvanquished.metainfo.xml
-
-  launcher:
-    plugin: nil
-    source: .
-    override-build: |
-      mkdir -p $CRAFT_PART_INSTALL/usr/bin
-      cp $CRAFT_PROJECT_DIR/unvanquished $CRAFT_PART_INSTALL/usr/bin
-      chmod 755 $CRAFT_PART_INSTALL/usr/bin/unvanquished
-
   assets:
     plugin: nil
     source: https://github.com/Unvanquished/Unvanquished.git
@@ -64,11 +46,22 @@ parts:
       git checkout "$LATEST_TAG"
       craftctl set version=${LATEST_TAG#v}
     override-build: |
+      cd $CRAFT_PART_SRC
       mkdir -p $CRAFT_PART_INSTALL/usr/share/unvanquished/pkg
       ./download-paks $CRAFT_PART_INSTALL/usr/share/unvanquished/pkg
+      
+      mkdir -p $CRAFT_PART_INSTALL/usr/share/metainfo/
+      cp $CRAFT_PROJECT_DIR/net.unvanquished.Unvanquished.metainfo.xml $CRAFT_PART_INSTALL/usr/share/metainfo
+      chmod 644 $CRAFT_PART_INSTALL/usr/share/metainfo/net.unvanquished.Unvanquished.metainfo.xml
+      
+      mkdir -p $CRAFT_PART_INSTALL/usr/bin
+      cp $CRAFT_PROJECT_DIR/unvanquished $CRAFT_PART_INSTALL/usr/bin
+      chmod 755 $CRAFT_PART_INSTALL/usr/bin/unvanquished
+    parse-info:
+      - usr/share/metainfo/net.unvanquished.Unvanquished.metainfo.xml
 
-  sdl3:
-    after: [metainfo, launcher, assets]
+  libsdl:
+    after: [assets]
     plugin: cmake
     source: https://github.com/libsdl-org/SDL.git
     source-type: git
@@ -93,7 +86,7 @@ parts:
       - jq
 
   unvanquished:
-    after: [metainfo, launcher, sdl3, assets]
+    after: [libsdl, assets]
     plugin: nil
     source: https://github.com/DaemonEngine/Daemon.git
     source-type: git
@@ -165,9 +158,7 @@ parts:
   cleanup:
     after:
       - unvanquished
-      - metainfo
-      - launcher
-      - sdl3
+      - libsdl
       - assets
     plugin: nil
     build-snaps:
