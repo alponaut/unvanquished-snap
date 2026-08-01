@@ -90,10 +90,10 @@ parts:
     plugin: nil
     source: https://github.com/DaemonEngine/Daemon.git
     source-type: git
-    source-tag: unvanquished/${SNAP_VERSION}
     override-build: |
       mkdir -p $CRAFT_PART_INSTALL/usr/lib/unvanquished
       cd $CRAFT_PART_SRC
+      git checkout "unvanquished/${SNAP_VERSION}"
       cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF -DBUILD_TTY_CLIENT=OFF -DBUILD_SERVER=OFF -DUSE_EXTERNAL_DEPS_LIBS=FALSE -DUSE_CURSES=TRUE -DUSE_HARDENING=TRUE -DUSE_LTO=TRUE -DUSE_OPENMP=TRUE
       cmake --build build -- -j$(nproc)
       cd build
