@@ -90,7 +90,7 @@ parts:
     plugin: nil
     source: https://github.com/DaemonEngine/Daemon.git
     source-type: git
-    source-tag: unvanquished/${SNAPCRAFT_PROJECT_VERSION}
+    source-tag: unvanquished/${SNAP_VERSION}
     override-build: |
       mkdir -p $CRAFT_PART_INSTALL/usr/lib/unvanquished
       cd $CRAFT_PART_SRC
