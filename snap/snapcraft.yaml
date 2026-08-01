@@ -59,7 +59,7 @@ parts:
       - jq
     override-pull: |
       set -e
-      LATEST_TAG=$(curl -s https://api.github.com/repos/PrismLauncher/PrismLauncher/releases/latest | jq -r .tag_name)
+      LATEST_TAG=$(curl -s https://api.github.com/repos/Unvanquished/Unvanquished/releases/latest | jq -r .tag_name)
       craftctl default
       git checkout "$LATEST_TAG"
       craftctl set version=${LATEST_TAG#v}
@@ -74,7 +74,7 @@ parts:
     source-type: git
     override-pull: |
       set -e
-      LATEST_TAG=$(curl -s https://api.github.com/repos/PrismLauncher/PrismLauncher/releases/latest | jq -r .tag_name)
+      LATEST_TAG=$(curl -s https://api.github.com/repos/libsdl-org/SDL/releases/latest | jq -r .tag_name)
       craftctl default
       git checkout "$LATEST_TAG"
     cmake-parameters:
