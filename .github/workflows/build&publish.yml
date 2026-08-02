@@ -1,9 +1,13 @@
-name: Rebuild snap
+name: Rebuild and publish snap (multiarch)
 
 on:
   schedule:
     - cron: '0 6 * * *'
-  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+      - edge
+  workflow_dispatch: {} 
 
 jobs:
   build:
@@ -19,9 +23,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build snap
+      - name: Build snap (${{ matrix.arch }})
         uses: snapcore/action-build@v1
         id: build
+
+      - name: Determine channel
+        id: channel
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "channel=candidate" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.ref }}" = "refs/heads/edge" ]; then
+            echo "channel=edge" >> "$GITHUB_OUTPUT"
+          else
+            echo "channel=edge" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Publish to Snap Store
         uses: snapcore/action-publish@v1
@@ -29,4 +44,4 @@ jobs:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
         with:
           snap: ${{ steps.build.outputs.snap }}
-          release: candidate
+          release: ${{ steps.channel.outputs.channel }}
